@@ -19,7 +19,7 @@
   register: docker_clean_crontab
 
 - name: Gather packages facts
-  package_facts:
+  ansible.builtin.package_facts:
     manager: "auto"
 
 - name: Reconfigure systemd-cron on docker-clean crontab change
