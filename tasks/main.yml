@@ -1,0 +1,41 @@
+---
+
+- name: Install Docker Clean
+  ansible.builtin.package:
+    name: docker-clean
+    state: present
+
+- name: Create Docker Clean cron.d record - docker-clean
+  when:
+    - docker_clean is defined
+    - docker_clean != None
+    - docker_clean | length > 0
+  ansible.builtin.template:
+    src: docker-clean.j2
+    dest: "/etc/cron.d/docker-clean"
+    owner: root
+    group: root
+    mode: "0644"
+  register: docker_clean
+
+- name: Gather packages facts
+  package_facts:
+    manager: "auto"
+
+- name: Reconfigure systemd-cron on docker-clean crontab change
+  when:
+    - "'systemd-cron' in ansible_facts.packages"
+    - docker_clean.results
+  ansible.builtin.systemd_service:
+    state: restarted
+    daemon_reload: true
+    name: cron-update
+
+- name: Restart crond on docker-clean crontab change
+  when:
+    - "'systemd-cron' not in ansible_facts.packages"
+    - docker_clean.results
+  ansible.builtin.systemd_service:
+    state: restarted
+    daemon_reload: true
+    name: crond
