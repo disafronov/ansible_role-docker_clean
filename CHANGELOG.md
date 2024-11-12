@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.2] - 2024-11-12
+
+### 🚜 Refactor
+
+- Workflow
+
 ## [1.1.1] - 2024-11-08
 
 ### 🐛 Bug Fixes
