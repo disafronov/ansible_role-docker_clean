@@ -24,7 +24,6 @@
 
 - name: Reconfigure systemd-cron on docker-clean crontab change
   when:
-    - docker_clean_crontab
     - docker_clean_crontab.changed
     - "'systemd-cron' in ansible_facts.packages"
   ansible.builtin.systemd_service:
@@ -34,7 +33,6 @@
 
 - name: Restart crond on docker-clean crontab change
   when:
-    - docker_clean_crontab
     - docker_clean_crontab.changed
     - "'systemd-cron' not in ansible_facts.packages"
   ansible.builtin.systemd_service:
